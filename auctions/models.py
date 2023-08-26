@@ -23,4 +23,17 @@ class Bid(models.Model):
     def __str__(self):
         return f'{self.bid} of {self.user_made} on {self.auction_listing}' 
 
-class Comment(models.):
+class Comment(models.Model):
+    comment = models.CharField(max_length=64)
+    product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='products')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commentators')
+
+    def __str__(self):
+        return f'{self.comment} by {self.user}'
+
+class WatchList(models.Model):
+    first = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owners')
+    own_list = models.ManyToManyField(AuctionListing, blank=True, related_name='watchlists')
+    
+    def __str__(self):
+        return f'{self.first}' 
