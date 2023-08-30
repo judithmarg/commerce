@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,9 +7,28 @@ from django.urls import reverse
 
 from .models import User, WatchList, AuctionListing
 
+class Counter():
+    def __init__(self, num):
+        self.counter = num
 
+    def add(self):
+        self.counter += 1 
+    
+    def ver(self):
+        return self.counter
+
+class NewListing(forms.Form):
+    title = forms.CharField(label='Titulo de la pagina')
+    descrip = forms.CharField(max_length=120)
+    bid = forms.IntegerField()
+    image = forms.URLField()
+    category = forms.CharField()
+
+count = Counter(1)
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html",{
+        'listings': AuctionListing.objects.all()
+    })
 
 
 def login_view(request):
@@ -62,9 +82,32 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def create_listing(request, listing_id):
+def create_listing(request):
+    print(AuctionListing.objects.all())
+    return render(request, 'auctions/create.html', {
+        'listings': AuctionListing.objects.all(),
+        'form' : NewListing()
+    })
+
+def do_listing(request):
     if request.method == 'POST':
-        listing = AuctionListing.objects.get(pk = listing_id)
-        watchlist = Watchlist.objects.get(pk = int(request.post['own_list']))
-        watchlist.own_list.add(listing)
-    return render(request, 'auction/create.html')
+        global count
+        count.add()
+        form = NewListing(request.POST)
+        if form.is_valid():
+            new_listing = AuctionListing(
+                pk = count.ver(),
+                title = form.cleaned_data['title'],
+                description = form.cleaned_data['descrip'],
+                start_bid = form.cleaned_data['bid'],
+                image = form.cleaned_data['image'],
+                category = form.cleaned_data['category']
+            )
+
+        ##watchlist = WatchList.objects.get(pk = int(request.POST['own_list']))
+        ##watchlist.own_list.add(new_listing)
+        return render(request, 'auctions/index.html',{
+            'listings': AuctionListing.objects.all()
+        })
+    else:
+        return render(request, 'auctions/create.html')

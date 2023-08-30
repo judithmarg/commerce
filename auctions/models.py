@@ -17,7 +17,8 @@ class AuctionListing(models.Model):
     description = models.CharField(max_length=64)
     start_bid = models.FloatField()
     image = models.ImageField() ##url
-    list_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
+    ##list_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
+    category = models.CharField(max_length=26)
 
     def __str__(self):
         return f'{self.id}: {self.title} , {self.description} with {self.start_bid}'
