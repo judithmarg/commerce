@@ -82,6 +82,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+<<<<<<< HEAD
 def create_listing(request):
     print(AuctionListing.objects.all())
     return render(request, 'auctions/create.html', {
@@ -109,5 +110,20 @@ def do_listing(request):
         return render(request, 'auctions/index.html',{
             'listings': AuctionListing.objects.all()
         })
+=======
+def create_listing(request, listing_id):
+    listing = AuctionListing.objects.get(pk=listing_id)
+
+    return render(request, 'auctions/create.html', {
+        'listing': listing
+    })
+
+def listing(request, listing_id):
+    if request.method == 'POST':
+        listing = AuctionListing.objects.get(pk = listing_id)
+        watchlist = WatchList.objects.get(pk = int(request.post['own_list']))
+        watchlist.own_list.add(listing)
+        return HttpResponseRedirect(reverse("index"))
+>>>>>>> 9d7072ac210c4f935d70277331a3c0cd4ad1283b
     else:
         return render(request, 'auctions/create.html')

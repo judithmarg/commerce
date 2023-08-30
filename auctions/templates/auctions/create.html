@@ -3,9 +3,15 @@
 {% block body %}
     <h2>Create a auction listing</h2>
 
+<<<<<<< HEAD
     <form action="{% url 'do_listing' %}" method="post">
         {% csrf_token %}
         <!--<label for="title">Title of listing</label>
+=======
+    <form action="{% url 'create_listing' listing.id %}" method="post">
+        {% csrf_token %}
+        <label for="title">Title of listing</label>
+>>>>>>> 9d7072ac210c4f935d70277331a3c0cd4ad1283b
         <input type="text" id="title" required>
         <label for="descrip">Description</label>
         <input type="text" id="descrip" required>
@@ -14,8 +20,14 @@
         <label for="urlimage">URL image</label>
         <input type="url" id="urlimage">
         <label for="category">Category</label>
+<<<<<<< HEAD
         <input type="text" id="category">-->
         {{ form }}
         <input type="submit" value="Submit">
     </form>
 {% endblock %}
+=======
+        <input type="text" id="category">
+    </form>
+{% endblock %}
+>>>>>>> 9d7072ac210c4f935d70277331a3c0cd4ad1283b
