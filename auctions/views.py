@@ -96,7 +96,7 @@ def do_listing(request):
         form = NewListing(request.POST)
         if form.is_valid():
             new_listing = AuctionListing(
-                pk = count.ver(),
+                ###pk = count.ver(), la BD las genera automaticamente
                 title = form.cleaned_data['title'],
                 description = form.cleaned_data['descrip'],
                 start_bid = form.cleaned_data['bid'],
