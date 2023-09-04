@@ -1,3 +1,38 @@
+*{
+    background-color: blanchedalmond;
+}
+
 body {
     padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1{
+    color: rgb(171, 113, 225);
+    font-weight: 800;
+    text-align: center;
+}
+
+h2{
+    color: rgb(240, 110, 78);
+    font-weight: 600;
+}
+
+section{
+    display: flex;
+    align-items: center;
+    padding: 0 150px;
+}
+
+.image{
+    padding: 30px;
+    width: 300px;
+}
+
+.form{
+    width: 50vh;
+    /*height: 100vh;*/
+    margin: 0 auto;
+    display: block;
+    
 }

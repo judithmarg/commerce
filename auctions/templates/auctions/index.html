@@ -6,11 +6,13 @@
         {% for listing in listings %}
             <li>
                 <section>
-                    <img src="{{ listing.image }}" alt="image of product">
-                    <h4>{{ listing.title }}</h4>
-                    <p>{{ listing.description }}</p>
-                    <p>{{ listing.start_bid }}</p>
-                    <p>{{ listing.category }}</p>
+                    <img class='image' src="{{ listing.image }}" alt="image of product">
+                    <div class="information">
+                        <h4>{{ listing.title }}</h4>
+                        <p>{{ listing.description }}</p>
+                        <p>{{ listing.start_bid }}</p>
+                        <p>{{ listing.category }}</p>
+                    </div>
                 </section>
             </li>
         {% endfor %}

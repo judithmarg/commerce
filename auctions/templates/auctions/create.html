@@ -1,9 +1,10 @@
 {% extends 'auctions/layout.html' %}
 
 {% block body %}
-    <h2>Create a auction listing</h2>
+    <div class="form">
+        <h2>Create a auction listing</h2>
 
-    <form action="{% url 'do_listing' %}" method="post">
+    <form action="{% url 'do_listing' %}" method="post" class="form">
         {% csrf_token %}
         <!--<label for="title">Title of listing</label>
         <input type="text" id="title" required>
@@ -18,4 +19,6 @@
         {{ form }}
         <input type="submit" value="Submit">
     </form>
+    </div>
+    
 {% endblock %}
