@@ -3,10 +3,11 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')  ##error a corregir
 
 class Category(models.Model):
     name_category = models.CharField(max_length=25)
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')   ##error a corregir
 
     def __str__(self):
         return f'{self.id} {self.name_category}'

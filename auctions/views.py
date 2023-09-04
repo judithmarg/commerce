@@ -112,5 +112,18 @@ def do_listing(request):
         return render(request, 'auctions/create.html')
     
 def listing(request, listing_id):
-    ##copiar del otro y entender c:
-    pass
+    listing = AuctionListing.objects.get(pk=listing_id)
+    return render(request, 'auctions/listing.html', {
+        'listing': listing,
+        'editor': listing.editors.all(),
+        'category' : listing.category.all()
+    })
+
+def bid(request, listing_id):
+    if request.method == 'POST':
+        item = AuctionListing.objects.get(pk=listing_id)
+        editors = User.objects.get(pk=int(request.POST['editor']))
+        editors.listings.add(item)
+        category = category.objects.get(pk=int(request.POST['category']))
+        category.listings.add(item)
+        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
