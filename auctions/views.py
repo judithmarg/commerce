@@ -110,3 +110,7 @@ def do_listing(request):
         })
     else:
         return render(request, 'auctions/create.html')
+    
+def listing(request, listing_id):
+    ##copiar del otro y entender c:
+    pass
