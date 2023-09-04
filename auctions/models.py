@@ -3,15 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')  ##error a corregir
-
-class Category(models.Model):
-    name_category = models.CharField(max_length=25)
-    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')   ##error a corregir
-
-    def __str__(self):
-        return f'{self.id} {self.name_category}'
-
+    ##listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')  ##error a corregir
+    pass
 
 class AuctionListing(models.Model):
     title = models.CharField(max_length=25)
@@ -23,7 +16,18 @@ class AuctionListing(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.title} , {self.description} with {self.start_bid}'
-    
+
+
+
+class Category(models.Model):
+    name_category = models.CharField(max_length=25)
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')   ##error a corregir
+
+    def __str__(self):
+        return f'{self.id} {self.name_category}'
+
+
+
 class Bid(models.Model):
     bid = models.FloatField()
     auction_listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='belongs')
