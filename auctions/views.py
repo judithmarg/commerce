@@ -105,8 +105,6 @@ def do_listing(request):
             )
             new_listing.save()
             print(new_listing)
-        ##watchlist = WatchList.objects.get(pk = int(request.POST['own_list']))
-        ##watchlist.own_list.add(new_listing)
         return render(request, 'auctions/index.html',{
             'listings': AuctionListing.objects.all()
         })
