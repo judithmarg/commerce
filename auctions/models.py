@@ -21,7 +21,7 @@ class User(AbstractUser):
 
 class Category(models.Model):
     name_category = models.CharField(max_length=25)
-    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='categories')   ##error a corregir
+    categories = models.ManyToManyField(AuctionListing, blank=True, related_name='categories')   ##error a corregir
 
     def __str__(self):
         return f'{self.id} {self.name_category}'

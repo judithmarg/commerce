@@ -1,21 +1,12 @@
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, WatchList, AuctionListing
-
-class Counter():
-    def __init__(self, num):
-        self.counter = num
-
-    def add(self):
-        self.counter += 1 
-    
-    def ver(self):
-        return self.counter
 
 class NewListing(forms.Form):
     title = forms.CharField(label='Titulo de la pagina')
@@ -24,7 +15,11 @@ class NewListing(forms.Form):
     image = forms.URLField()
     category = forms.CharField()
 
-count = Counter(1)
+class ListingBid(forms.Form):
+    bid_current = forms.FloatField()
+
+watchlist = WatchList()
+
 def index(request):
     return render(request, "auctions/index.html",{
         'listings': AuctionListing.objects.all()
@@ -91,8 +86,6 @@ def create_listing(request):
 
 def do_listing(request):
     if request.method == 'POST':
-        global count
-        count.add()
         form = NewListing(request.POST)
         if form.is_valid():
             new_listing = AuctionListing(
@@ -116,7 +109,8 @@ def listing(request, listing_id):
     return render(request, 'auctions/listing.html', {
         'listing': listing,
         'editor': listing.listings.all(),
-        'categories' : listing.categories.all()
+        'categories' : listing.categories.all(),
+        'form_bid': ListingBid()
     })
 
 def bid(request, listing_id):
@@ -125,5 +119,16 @@ def bid(request, listing_id):
         editors = User.objects.get(pk=int(request.POST['editor']))
         editors.listings.add(item)
         category = category.objects.get(pk=int(request.POST['category']))
-        category.listings.add(item)
+        category.categories.add(item)
         return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+
+@login_required
+def saveWatchlist(request, listing_id):
+    if request.method == 'POST':
+        itemCurrent = AuctionListing.objects.get(pk=listing_id)
+        if itemCurrent in watchlist:
+            watchlist.own_list.remove(itemCurrent)
+        else: 
+            watchlist.own_list.add(itemCurrent) ##watchlists
+        return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
+
