@@ -2,9 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class User(AbstractUser):
-    ##listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')  ##error a corregir
-    pass
+
 
 class AuctionListing(models.Model):
     title = models.CharField(max_length=25)
@@ -17,11 +15,13 @@ class AuctionListing(models.Model):
     def __str__(self):
         return f'{self.id}: {self.title} , {self.description} with {self.start_bid}'
 
-
+class User(AbstractUser):
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')  ##error a corregir
+    pass
 
 class Category(models.Model):
     name_category = models.CharField(max_length=25)
-    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listings')   ##error a corregir
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='categories')   ##error a corregir
 
     def __str__(self):
         return f'{self.id} {self.name_category}'

@@ -115,8 +115,8 @@ def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     return render(request, 'auctions/listing.html', {
         'listing': listing,
-        ##'editor': listing.editors.all(),
-        'categories' : listing.category.all()
+        'editor': listing.listings.all(),
+        'categories' : listing.categories.all()
     })
 
 def bid(request, listing_id):
