@@ -108,7 +108,7 @@ def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     return render(request, 'auctions/listing.html', {
         'listing': listing,
-        'editor': listing.listings.all(),
+        'editor': listing.listingsmuch.all(),
         'categories' : listing.categories.all(),
         'form_bid': ListingBid()
     })
@@ -126,9 +126,10 @@ def bid(request, listing_id):
 def saveWatchlist(request, listing_id):
     if request.method == 'POST':
         itemCurrent = AuctionListing.objects.get(pk=listing_id)
-        if itemCurrent in watchlist:
+        if itemCurrent in watchlist.objects():
             watchlist.own_list.remove(itemCurrent)
         else: 
             watchlist.own_list.add(itemCurrent) ##watchlists
+        print(watchlist)
         return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
 

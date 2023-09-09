@@ -3,7 +3,7 @@
 {% block body %}
     <div class="infoItem">
         <h1>Listing {{ listing.id }} </h1>
-        <form action="% url 'saveWatchlist' listing.id %" method="post">
+        <form action="{% url 'saveWatchlist' listing.id %}" method="post">
             {% csrf_token %}
             <input type="submit" value="Watchlist">
         </form>
@@ -28,8 +28,8 @@
     <div class="interaccion">
         <h2>Details </h2>
         <ul>
-            {% for user in editors %}
-                <li>Listed by: {{ user }}</li>
+            {% for editor in editors %}
+                <li>Listed by: {{ editor }}</li>
             {% empty %}
                 <li>Listed by: No editors </li>
             {% endfor %}

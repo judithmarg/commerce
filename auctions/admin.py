@@ -11,9 +11,12 @@ from .models import AuctionListing, Category, WatchList, Comment, Bid, User
 class CategoryAdmin(admin.ModelAdmin):
     filter_horizontal = ('categories',)
 
+class UserAdmin(admin.ModelAdmin):
+    filter_horizontal = ('listings', )
+
 admin.site.register(AuctionListing)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Bid)
 admin.site.register(Comment)
 admin.site.register(WatchList)
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
