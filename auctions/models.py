@@ -45,8 +45,8 @@ class Comment(models.Model):
         return f'{self.comment} by {self.user}'
 
 class WatchList(models.Model):
-    first = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owners')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owners')
     own_list = models.ManyToManyField(AuctionListing, blank=True, related_name='watchlists')
     
-    def __str__(self):
-        return f'{self.first}' 
+    #def __str__(self):
+     #   return f'{self.first}' 

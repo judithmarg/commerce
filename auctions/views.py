@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, WatchList, AuctionListing
+from .models import User, WatchList, AuctionListing, Category , Bid
 
 class NewListing(forms.Form):
     title = forms.CharField(label='Titulo de la pagina')
@@ -18,7 +18,7 @@ class NewListing(forms.Form):
 class ListingBid(forms.Form):
     bid_current = forms.FloatField()
 
-watchlist = WatchList()
+#watchlist = WatchList()
 
 def index(request):
     return render(request, "auctions/index.html",{
@@ -103,7 +103,8 @@ def do_listing(request):
         })
     else:
         return render(request, 'auctions/create.html')
-    
+
+
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     return render(request, 'auctions/listing.html', {
@@ -113,23 +114,40 @@ def listing(request, listing_id):
         'form_bid': ListingBid()
     })
 
+@login_required
 def bid(request, listing_id):
     if request.method == 'POST':
         item = AuctionListing.objects.get(pk=listing_id)
-        editors = User.objects.get(pk=int(request.POST['editor']))
-        editors.listings.add(item)
-        category = category.objects.get(pk=int(request.POST['category']))
-        category.categories.add(item)
-        return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+        #editors = User.objects.get(pk=int(request.POST['editor']))
+        #editors.listings.add(item)
+        #category = Category.objects.get(pk=int(request.POST['category']))
+        #category.categories.add(item)
+
+        '''falta mejorar '''
+        bid_current, created = Bid.objects.get_or_create(user_made=request.user)
+        bid_made = float(request.POST['bid_current'])
+        if created:
+            print('Si se creo')
+        else:
+            print('No se creo, hay errores')
+        if bid_made > item.start_bid: #and bid_made > bid_current.bid: #existe
+            bid_current.user_made = request.user
+            bid_current.auction_listing = item
+            bid_current.bid = bid_made
+            bid_current.save()
+        return HttpResponseRedirect(reverse('listing', args=(item.id, )))
 
 @login_required
 def saveWatchlist(request, listing_id):
     if request.method == 'POST':
         itemCurrent = AuctionListing.objects.get(pk=listing_id)
-        if itemCurrent in watchlist.objects():
+        watchlist, created = WatchList.objects.get_or_create(user=request.user)
+
+        if itemCurrent in watchlist.own_list.all():
             watchlist.own_list.remove(itemCurrent)
         else: 
+            watchlist.user=request.user
             watchlist.own_list.add(itemCurrent) ##watchlists
-        print(watchlist)
-        return HttpResponseRedirect(reverse('listing', args=(listing.id, )))
+
+    return HttpResponseRedirect(reverse('listing', args=(itemCurrent.id, )))
 

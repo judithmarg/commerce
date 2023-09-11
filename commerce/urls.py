@@ -18,5 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("auctions.urls"))
+    path("", include("auctions.urls"))#,
+    #path('accounts/', include('django.contrib.auth.urls')) esto hace catastrofes en login :?
 ]
