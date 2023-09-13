@@ -109,7 +109,7 @@ def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     return render(request, 'auctions/listing.html', {
         'listing': listing,
-        'editor': listing.listingsmuch.all(),
+        'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
         'form_bid': ListingBid()
     })
