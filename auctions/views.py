@@ -124,18 +124,18 @@ def bid(request, listing_id):
         #category.categories.add(item)
 
         '''falta mejorar '''
-        bid_current, created = Bid.objects.get_or_create(user_made=request.user)
+        #bid_current, created = Bid.objects.get_or_create(user=request.user)
         bid_made = float(request.POST['bid_current'])
-        if created:
-            print('Si se creo')
-        else:
-            print('No se creo, hay errores')
+        bid_created = Bid(bid_made, item.id, request.user)
+
         if bid_made > item.start_bid: #and bid_made > bid_current.bid: #existe
-            bid_current.user_made = request.user
-            bid_current.auction_listing = item
-            bid_current.bid = bid_made
-            bid_current.save()
-        return HttpResponseRedirect(reverse('listing', args=(item.id, )))
+            bid_created.user = request.user
+            bid_created.auction_listing = item
+            bid_created.bid = bid_made
+            bid_created.save()
+            return HttpResponseRedirect(reverse('listing', args=(item.id, )))
+        else:
+            return render(request, 'auctions/error.html')
 
 @login_required
 def saveWatchlist(request, listing_id):

@@ -31,10 +31,10 @@ class Category(models.Model):
 class Bid(models.Model):
     bid = models.FloatField()
     auction_listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='belongs')
-    user_made = models.ForeignKey(User, on_delete=models.CASCADE, related_name='auctioneers')
+    user= models.ForeignKey(User, on_delete=models.CASCADE, related_name='auctioneers')
 
     def __str__(self):
-        return f'{self.bid} of {self.user_made} on {self.auction_listing}' 
+        return f'{self.bid} of {self.user} on {self.auction_listing}' 
 
 class Comment(models.Model):
     comment = models.CharField(max_length=64)
