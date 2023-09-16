@@ -7,6 +7,9 @@
             {% csrf_token %}
             <input type="submit" value="Watchlist">
         </form>
+        <form action="{% url 'close' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Close"></form>
         <ul>
             <li><img class='image' src="{{ listing.image }}" alt="image of product"></li>
             <li><h4>{{ listing.title }}</h4><!--<a href="../{% url 'listing' listing.id %}">{{ listing.title }}</a></h4></li>-->

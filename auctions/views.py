@@ -157,8 +157,8 @@ def saveWatchlist(request, listing_id):
 @login_required
 def close(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
-     watchlist, created = WatchList.objects.get_or_create(user=request.user)
-    if request.user is User.listings:
+    watchlist, created = WatchList.objects.get_or_create(user=request.user)
+    if request.user is User.listings and request.method == 'POST':
         watchlist.own_list.remove(item)
         return HttpResponseRedirect(reverse('listing', args=(item.id,), form_bid= 'disabled'))
     else:
