@@ -25,7 +25,6 @@ def index(request):
         'listings': AuctionListing.objects.all()
     })
 
-
 def login_view(request):
     if request.method == "POST":
 
@@ -45,11 +44,9 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
@@ -94,7 +91,8 @@ def do_listing(request):
                 description = form.cleaned_data['descrip'],
                 start_bid = form.cleaned_data['bid'],
                 image = form.cleaned_data['image'],
-                category = form.cleaned_data['category']
+                category = form.cleaned_data['category'],
+                active = True
             )
             new_listing.save()
             print(new_listing)
@@ -105,7 +103,6 @@ def do_listing(request):
     else:
         return render(request, 'auctions/create.html')
 
-
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     bid = Bid.objects.filter(auction_listing=listing_id)
@@ -114,7 +111,8 @@ def listing(request, listing_id):
         'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
         'last_bid': bid.order_by('-bid').first().bid,  #bid = Bid.objects.get(pk=listing_id).get()
-        'form_bid': ListingBid()
+        'form_bid': ListingBid(),
+        'is_active': listing.active
     })
 
 @login_required
@@ -157,6 +155,7 @@ def saveWatchlist(request, listing_id):
 @login_required
 def close(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
+    item.active = False
     watchlist, created = WatchList.objects.get_or_create(user=request.user)
     if request.user is User.listings and request.method == 'POST':
         watchlist.own_list.remove(item)

@@ -12,6 +12,7 @@ class AuctionListing(models.Model):
     ##list_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
     category = models.CharField(max_length=26)
     #editors = models.CharField(max_length=26)
+    active = models.BooleanField(null=True)
 
     def __str__(self):
         return f'{self.id}: {self.title} , {self.description} with {self.start_bid}'
