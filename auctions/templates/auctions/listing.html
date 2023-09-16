@@ -19,6 +19,7 @@
     <div class="bidsAll">
         <form action="{% url 'bid' listing.id %}" method="post">
             {% csrf_token %}
+            <label> Last bid: {{ last_bid }}</label>
             {{ form_bid }}
             <input type="submit" value="Place bid">
         </form>

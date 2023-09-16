@@ -99,7 +99,8 @@ def do_listing(request):
             new_listing.save()
             print(new_listing)
         return render(request, 'auctions/index.html',{
-            'listings': AuctionListing.objects.all()
+            'listings': AuctionListing.objects.all(),
+            'last_bid': new_listing.start_bid()
         })
     else:
         return render(request, 'auctions/create.html')
@@ -107,10 +108,12 @@ def do_listing(request):
 
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
+    bid = Bid.objects.filter(auction_listing=listing_id)
     return render(request, 'auctions/listing.html', {
         'listing': listing,
         'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
+        'last_bid': bid.order_by('-bid').first().bid,  #bid = Bid.objects.get(pk=listing_id).get()
         'form_bid': ListingBid()
     })
 
