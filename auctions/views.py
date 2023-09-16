@@ -154,3 +154,12 @@ def saveWatchlist(request, listing_id):
 
     return HttpResponseRedirect(reverse('listing', args=(itemCurrent.id, )))
 
+@login_required
+def close(request, listing_id):
+    item = AuctionListing.objects.get(pk=listing_id)
+     watchlist, created = WatchList.objects.get_or_create(user=request.user)
+    if request.user is User.listings:
+        watchlist.own_list.remove(item)
+        return HttpResponseRedirect(reverse('listing', args=(item.id,), form_bid= 'disabled'))
+    else:
+        return HttpResponseRedirect(reverse('listing', args=(item.id, )))
