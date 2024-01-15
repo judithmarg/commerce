@@ -104,12 +104,18 @@ def do_listing(request):
 
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
-    bid = Bid.objects.filter(auction_listing=listing_id)
+    bids = Bid.objects.filter(auction_listing=listing_id)
+    last_bid = bids.order_by('-bid').first()
+    if last_bid:
+        last_bid_value = last_bid.bid
+    else:
+        last_bid_value = listing.start_bid
+    
     return render(request, 'auctions/listing.html', {
         'listing': listing,
         'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
-        'last_bid': bid.order_by('-bid').first().bid or listing.start_bid,  #bid = Bid.objects.get(pk=listing_id).get()
+        'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
         'form_bid': ListingBid(),
         'is_active': listing.active
     })
