@@ -110,14 +110,19 @@ def listing(request, listing_id):
         last_bid_value = last_bid.bid
     else:
         last_bid_value = listing.start_bid
-    
+
+    watchlist = WatchList.objects.filter(user=request.user, own_list=listing)
+    print('watchlist is ', watchlist)
+    in_watchlist = bool(watchlist)
+
     return render(request, 'auctions/listing.html', {
         'listing': listing,
         'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
         'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
         'form_bid': ListingBid(),
-        'is_active': listing.active
+        'is_active': listing.active,
+        'in_watchlist' : in_watchlist
     })
 
 @login_required
@@ -139,6 +144,8 @@ def bid(request, listing_id):
             bid_created.auction_listing = item
             bid_created.bid = bid_made
             bid_created.save()
+            item.start_bid = bid_made
+            item.save()
             return HttpResponseRedirect(reverse('listing', args=(item.id, )))
         else:
             return render(request, 'auctions/error.html')
