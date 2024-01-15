@@ -75,7 +75,6 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create_listing(request):
-    print(AuctionListing.objects.all())
     return render(request, 'auctions/create.html', {
         'listings': AuctionListing.objects.all(),
         'form' : NewListing()
@@ -92,7 +91,8 @@ def do_listing(request):
                 start_bid = form.cleaned_data['bid'],
                 image = form.cleaned_data['image'],
                 category = form.cleaned_data['category'],
-                active = True
+                active = True,
+                owner = request.user.username
             )
             new_listing.save()
         return render(request, 'auctions/index.html',{
@@ -102,6 +102,7 @@ def do_listing(request):
     else:
         return render(request, 'auctions/create.html')
 
+@login_required
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     bids = Bid.objects.filter(auction_listing=listing_id)
@@ -112,12 +113,12 @@ def listing(request, listing_id):
         last_bid_value = listing.start_bid
 
     watchlist = WatchList.objects.filter(user=request.user, own_list=listing)
-    print('watchlist is ', watchlist)
     in_watchlist = bool(watchlist)
 
     return render(request, 'auctions/listing.html', {
         'listing': listing,
-        'editors': listing.listingsmuch.all(),  #se coloca el alias dado
+        'editor': listing.winner,  #se coloca el alias dado
+        'autor': listing.owner,
         'categories' : listing.categories.all(),
         'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
         'form_bid': ListingBid(),
@@ -146,8 +147,12 @@ def bid(request, listing_id):
             bid_created.save()
             item.start_bid = bid_made
             item.save()
+            competitor = request.user.username
+            item.winner = competitor
+            item.save()
             return HttpResponseRedirect(reverse('listing', args=(item.id, )))
         else:
+            competitor = item.winner
             return render(request, 'auctions/error.html')
 
 @login_required
@@ -168,6 +173,7 @@ def saveWatchlist(request, listing_id):
 def close(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
     item.active = False
+    item.save()
     watchlist, created = WatchList.objects.get_or_create(user=request.user)
     if request.user is User.listings and request.method == 'POST':
         watchlist.own_list.remove(item)

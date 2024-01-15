@@ -11,14 +11,15 @@ class AuctionListing(models.Model):
     image = models.URLField() ##url
     ##list_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
     category = models.CharField(max_length=26)
-    #editors = models.CharField(max_length=26)
+    winner = models.CharField(max_length=26, null=True)
     active = models.BooleanField(null=True)
-
+    owner = models.CharField(max_length=26, null=True)
+    
     def __str__(self):
         return f'{self.id}: {self.title} , {self.description} with {self.start_bid}'
 
 class User(AbstractUser):
-    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='listingsmuch')  ##error a corregir
+    listings = models.ManyToManyField(AuctionListing, blank=True, related_name='editors')  ##error a corregir
 
 class Category(models.Model):
     name_category = models.CharField(max_length=25)

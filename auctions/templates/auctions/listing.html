@@ -40,11 +40,12 @@
     <div class="interaccion">
         <h2>Details </h2>
         <ul>
-            {% for editor in editors %}
-                <li>Listed by: {{ editor }}</li>
-            {% empty %}
-                <li>Listed by: No editors </li>
-            {% endfor %}
+            {% if editor is not null %}
+                <li>Last bid by: {{ editor }}</li>
+            {% else %}
+                <li>Last bid by: No editors </li>
+            {% endif %}
+            <li>Listed by: {{ autor }}</li>
             {% for cat in categories %}
                 <li>Category: {{cat }} </li>
             {% empty %}
