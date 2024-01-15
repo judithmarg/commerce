@@ -11,7 +11,7 @@ from .models import User, WatchList, AuctionListing, Category , Bid
 class NewListing(forms.Form):
     title = forms.CharField(label='Titulo de la pagina')
     descrip = forms.CharField(max_length=120)
-    bid = forms.IntegerField()
+    bid = forms.FloatField()
     image = forms.URLField()
     category = forms.CharField()
 
@@ -95,10 +95,9 @@ def do_listing(request):
                 active = True
             )
             new_listing.save()
-            print(new_listing)
         return render(request, 'auctions/index.html',{
             'listings': AuctionListing.objects.all(),
-            'last_bid': new_listing.start_bid()
+            'last_bid': new_listing.start_bid
         })
     else:
         return render(request, 'auctions/create.html')
@@ -110,7 +109,7 @@ def listing(request, listing_id):
         'listing': listing,
         'editors': listing.listingsmuch.all(),  #se coloca el alias dado
         'categories' : listing.categories.all(),
-        'last_bid': bid.order_by('-bid').first().bid,  #bid = Bid.objects.get(pk=listing_id).get()
+        'last_bid': bid.order_by('-bid').first().bid or listing.start_bid,  #bid = Bid.objects.get(pk=listing_id).get()
         'form_bid': ListingBid(),
         'is_active': listing.active
     })
