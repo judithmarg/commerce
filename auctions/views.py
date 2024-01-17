@@ -114,17 +114,19 @@ def listing(request, listing_id):
 
     watchlist = WatchList.objects.filter(user=request.user, own_list=listing)
     in_watchlist = bool(watchlist)
-
-    return render(request, 'auctions/listing.html', {
-        'listing': listing,
-        'editor': listing.winner,  #se coloca el alias dado
-        'autor': listing.owner,
-        'categories' : listing.categories.all(),
-        'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
-        'form_bid': ListingBid(),
-        'is_active': listing.active,
-        'in_watchlist' : in_watchlist
-    })
+    if request.user.username == listing.winner:
+        return render(request, 'auctions/win.html')
+    else:
+        return render(request, 'auctions/listing.html', {
+            'listing': listing,
+            'editor': listing.winner,  #se coloca el alias dado
+            'autor': listing.owner,
+            'categories' : listing.categories.all(),
+            'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
+            'form_bid': ListingBid(),
+            'is_active': listing.active,
+            'in_watchlist' : in_watchlist
+        })
 
 @login_required
 def bid(request, listing_id):
@@ -172,11 +174,10 @@ def saveWatchlist(request, listing_id):
 @login_required
 def close(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
-    item.active = False
-    item.save()
-    watchlist, created = WatchList.objects.get_or_create(user=request.user)
-    if request.user is User.listings and request.method == 'POST':
-        watchlist.own_list.remove(item)
-        return HttpResponseRedirect(reverse('listing', args=(item.id,), form_bid= 'disabled'))
+    print(item.owner)
+    if request.user.username == item.owner and request.method == 'POST':
+        item.active = False
+        item.save()
+        return HttpResponseRedirect(reverse('listing', args=(item.id,)))
     else:
         return HttpResponseRedirect(reverse('listing', args=(item.id, )))
