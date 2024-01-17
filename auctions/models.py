@@ -28,7 +28,10 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.id} {self.name_category}'
 
-
+class Comment(models.Model):
+    userComment = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
+    comment = models.TextField()
+    itemBelongs = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='item_belongs')
 
 class Bid(models.Model):
     bid = models.FloatField()

@@ -174,10 +174,13 @@ def saveWatchlist(request, listing_id):
 @login_required
 def close(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
-    print(item.owner)
     if request.user.username == item.owner and request.method == 'POST':
         item.active = False
         item.save()
         return HttpResponseRedirect(reverse('listing', args=(item.id,)))
     else:
         return HttpResponseRedirect(reverse('listing', args=(item.id, )))
+    
+@login_required
+def comment(request, listing_id):
+    return HttpResponseRedirect(reverse('listing', args=(item.id, )))
