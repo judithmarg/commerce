@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, WatchList, AuctionListing, Category , Bid
+from .models import User, WatchList, Comment, AuctionListing, Category , Bid
 
 class NewListing(forms.Form):
     title = forms.CharField(label='Titulo de la pagina')
@@ -17,6 +17,9 @@ class NewListing(forms.Form):
 
 class ListingBid(forms.Form):
     bid_current = forms.FloatField()
+
+class CommentListing(forms.Form):
+    comment_current = forms.CharField()
 
 #watchlist = WatchList()
 
@@ -106,6 +109,8 @@ def do_listing(request):
 def listing(request, listing_id):
     listing = AuctionListing.objects.get(pk=listing_id)
     bids = Bid.objects.filter(auction_listing=listing_id)
+    comentarios = Comment.objects.filter(user= request.user, product=listing_id)
+
     last_bid = bids.order_by('-bid').first()
     if last_bid:
         last_bid_value = last_bid.bid
@@ -114,6 +119,9 @@ def listing(request, listing_id):
 
     watchlist = WatchList.objects.filter(user=request.user, own_list=listing)
     in_watchlist = bool(watchlist)
+    
+    commentsAll = [(com.user.username, com.comment) for com in comentarios]
+    print(commentsAll)
     if request.user.username == listing.winner:
         return render(request, 'auctions/win.html')
     else:
@@ -125,7 +133,9 @@ def listing(request, listing_id):
             'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
             'form_bid': ListingBid(),
             'is_active': listing.active,
-            'in_watchlist' : in_watchlist
+            'in_watchlist' : in_watchlist,
+            'form_comment': CommentListing(),
+            'commentsAll':commentsAll
         })
 
 @login_required
@@ -184,4 +194,18 @@ def close(request, listing_id):
 @login_required
 def comment(request, listing_id):
     item = AuctionListing.objects.get(pk=listing_id)
+    if request.method == 'POST':
+        form = CommentListing(request.POST)
+        if form.is_valid():
+            new_comment = Comment(
+                comment = form.cleaned_data['comment_current'],
+                product = item,
+                user = request.user        
+                )
+    '''comment_sent = request.POST['comment_current']
+    comentario = Comment(comment_sent, item.id, request.user.id)
+    comentario.comment = comment_sent
+    comentario.product = item
+    comentario.user = request.user'''
+    new_comment.save()
     return HttpResponseRedirect(reverse('listing', args=(item.id, )))
