@@ -183,4 +183,5 @@ def close(request, listing_id):
     
 @login_required
 def comment(request, listing_id):
+    item = AuctionListing.objects.get(pk=listing_id)
     return HttpResponseRedirect(reverse('listing', args=(item.id, )))

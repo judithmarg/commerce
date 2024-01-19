@@ -56,7 +56,17 @@
 
     <div class="comments">
         <h2>Comments</h2>
-        
+        <form action="{% url 'comment' listing.id %}" method="post">
+            {% csrf_token %}
+            <label for="comment">Comentar:</label>
+            {{ form_comment }}
+            <input type="submit" value="Send">
+        </form>
+        <ul>
+            {% for comment in commentsAll %}
+            <li class="box_comentador">{{comment.first}}</li>
+            <li class="box_comentario">{{comment.second}}</li>
+        </ul>
     </div>
     
 {% endblock %}

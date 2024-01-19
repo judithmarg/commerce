@@ -1,9 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-
-
 class AuctionListing(models.Model):
     title = models.CharField(max_length=25)
     description = models.CharField(max_length=64)
