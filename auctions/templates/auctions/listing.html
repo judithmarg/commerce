@@ -63,9 +63,9 @@
             <input type="submit" value="Send">
         </form>
         <ul>
-            {% for comment in commentsAll %}
-            <li class="box_comentador">{{comment}}</li>
-            <li class="box_comentario">{{comment}}</li>
+            {% for commenter, content in commentsAll %}
+            <li class="box_comentador">{{commenter}}</li>
+            <li class="box_comentario">{{content}}</li>
             {% endfor %}
         </ul>
     </div>
