@@ -45,3 +45,23 @@ section{
     align-items: center;
     justify-content: center;
 }
+
+.box{
+    background-color: rgb(255, 255, 255);
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.box_comentador{
+    text-align: end;
+    background-color: rgba(132, 64, 195, 0.522);
+    margin-bottom: 10px;
+}
+
+.box_comentario{
+    background-color: rgba(170, 96, 145, 0.522);
+}

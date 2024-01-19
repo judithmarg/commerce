@@ -64,8 +64,10 @@
         </form>
         <ul>
             {% for commenter, content in commentsAll %}
-            <li class="box_comentador">{{commenter}}</li>
-            <li class="box_comentario">{{content}}</li>
+            <li class="box">
+                <div class="box_comentador">{{commenter}}</div>
+                <div class="box_comentario">{{content}}</div>
+            </li>
             {% endfor %}
         </ul>
     </div>
