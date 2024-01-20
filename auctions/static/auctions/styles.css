@@ -12,6 +12,10 @@ ul{
     list-style-type: none;
 }
 
+ul>a{
+    padding: 8px 16px;
+}
+
 h1{
     color: rgb(171, 113, 225);
     font-weight: 800;
@@ -46,13 +50,17 @@ section{
     justify-content: center;
 }
 
+.box_main{
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+}
+
 .box{
     background-color: rgb(255, 255, 255);
     width: 300px;
     height: auto;
-    display: flex;
-    flex-direction: column-reverse;
-    flex-wrap: wrap;
+    
     margin-bottom: 10px;
     border-radius: 5px;
 }

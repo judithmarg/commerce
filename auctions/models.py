@@ -25,11 +25,6 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.id} {self.name_category}'
 
-class Comment(models.Model):
-    userComment = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
-    comment = models.TextField()
-    itemBelongs = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='item_belongs')
-
 class Bid(models.Model):
     bid = models.FloatField()
     auction_listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='belongs')
@@ -41,7 +36,7 @@ class Bid(models.Model):
 class Comment(models.Model):
     comment = models.CharField(max_length=64)
     product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='products')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commentators')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='commenters')
 
     def __str__(self):
         return f'{self.comment} by {self.user}'

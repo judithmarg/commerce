@@ -62,10 +62,10 @@
             {{ form_comment }}
             <input type="submit" value="Send">
         </form>
-        <ul>
+        <ul class="main_box">
             {% for commenter, content in commentsAll %}
             <li class="box">
-                <div class="box_comentador">{{commenter}}</div>
+                <div class="box_comentador">By: {{commenter}}</div>
                 <div class="box_comentario">{{content}}</div>
             </li>
             {% endfor %}

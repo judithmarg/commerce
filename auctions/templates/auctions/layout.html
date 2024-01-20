@@ -25,8 +25,11 @@
             </li>
             {% if user.is_authenticated %}
                 <!--listing pageee-->
-                <li class="listing">
-                    <a href="{% url 'create_listing' %}" class="listing-link">Create Listing</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_watchlist' %}" >Watchlist</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_listing' %}" class="listing-link">Create Listing</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

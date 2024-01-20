@@ -202,10 +202,9 @@ def comment(request, listing_id):
                 product = item,
                 user = request.user        
                 )
-    '''comment_sent = request.POST['comment_current']
-    comentario = Comment(comment_sent, item.id, request.user.id)
-    comentario.comment = comment_sent
-    comentario.product = item
-    comentario.user = request.user'''
     new_comment.save()
     return HttpResponseRedirect(reverse('listing', args=(item.id, )))
+
+@login_required
+def view_watchlist(request):
+    return render(request, 'auctions/error.html')
