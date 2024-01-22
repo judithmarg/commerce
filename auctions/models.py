@@ -1,13 +1,17 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+class Category(models.Model):
+    name_category = models.CharField(max_length=25)
+    def __str__(self):
+        return f'{self.id} {self.name_category}'
+
 class AuctionListing(models.Model):
     title = models.CharField(max_length=25)
     description = models.CharField(max_length=64)
     start_bid = models.FloatField()
     image = models.URLField() ##url
-    ##list_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
-    category = models.CharField(max_length=26)
+    category = models.CharField(max_length=25)
     winner = models.CharField(max_length=26, null=True)
     active = models.BooleanField(null=True)
     owner = models.CharField(max_length=26, null=True)
@@ -17,13 +21,6 @@ class AuctionListing(models.Model):
 
 class User(AbstractUser):
     listings = models.ManyToManyField(AuctionListing, blank=True, related_name='editors')  ##error a corregir
-
-class Category(models.Model):
-    name_category = models.CharField(max_length=25)
-    categories = models.ManyToManyField(AuctionListing, blank=True, related_name='categories')   ##se puede mejorar 
-
-    def __str__(self):
-        return f'{self.id} {self.name_category}'
 
 class Bid(models.Model):
     bid = models.FloatField()

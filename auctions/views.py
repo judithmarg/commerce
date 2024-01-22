@@ -13,7 +13,7 @@ class NewListing(forms.Form):
     descrip = forms.CharField(max_length=120)
     bid = forms.FloatField()
     image = forms.URLField()
-    category = forms.CharField()
+    category = forms.CharField(max_length=25)
 
 class ListingBid(forms.Form):
     bid_current = forms.FloatField()
@@ -210,7 +210,12 @@ def comment(request, listing_id):
 def view_watchlist(request):
     watclist_entries = WatchList.objects.filter(user=request.user)
     listings = AuctionListing.objects.filter(watchlists__in = watclist_entries)
-    
+
+    return render(request, "auctions/watchlist.html",{
+        'listings': listings
+    })
+
+def categories(request):
     return render(request, "auctions/watchlist.html",{
         'listings': listings
     })
