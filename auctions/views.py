@@ -178,6 +178,7 @@ def saveWatchlist(request, listing_id):
         else: 
             watchlist.user=request.user
             watchlist.own_list.add(itemCurrent) ##watchlists
+        watchlist.save()
 
     return HttpResponseRedirect(reverse('listing', args=(itemCurrent.id, )))
 
@@ -207,4 +208,9 @@ def comment(request, listing_id):
 
 @login_required
 def view_watchlist(request):
-    return render(request, 'auctions/error.html')
+    watclist_entries = WatchList.objects.filter(user=request.user)
+    listings = AuctionListing.objects.filter(watchlists__in = watclist_entries)
+    
+    return render(request, "auctions/watchlist.html",{
+        'listings': listings
+    })

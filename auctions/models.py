@@ -46,4 +46,4 @@ class WatchList(models.Model):
     own_list = models.ManyToManyField(AuctionListing, blank=True, related_name='watchlists')
     
     def __str__(self):
-        return f'{self.own_list}' 
+        return f'{self.own_list} and {self.user}' 
