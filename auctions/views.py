@@ -215,7 +215,13 @@ def view_watchlist(request):
         'listings': listings
     })
 
-def categories(request):
-    return render(request, "auctions/watchlist.html",{
+def category(request):
+    return render(request, "auctions/categories.html")
+
+def each_categories(request, name_select):
+    
+    listings = AuctionListing.objects.filter(category=name_select)
+    print('debug chistoso' , listings)
+    return render(request, "auctions/index.html",{
         'listings': listings
     })
