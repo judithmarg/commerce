@@ -46,11 +46,7 @@
                 <li>Last bid by: No editors </li>
             {% endif %}
             <li>Listed by: {{ autor }}</li>
-            {% for cat in categories %}
-                <li>Category: {{cat }} </li>
-            {% empty %}
-                <li>Category: No category listed </li>
-            {% endfor %}
+            <li>Category: {{ category }} </li>
     </ul>    
     </div>
 

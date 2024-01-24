@@ -129,7 +129,7 @@ def listing(request, listing_id):
             'listing': listing,
             'editor': listing.winner,  #se coloca el alias dado
             'autor': listing.owner,
-            'categories' : listing.categories.all(),
+            'category' : listing.category,
             'last_bid': last_bid_value, #bid = Bid.objects.get(pk=listing_id).get()
             'form_bid': ListingBid(),
             'is_active': listing.active,
